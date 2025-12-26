@@ -1,4 +1,4 @@
-import type { SteamProfile } from '../core/types';
+import type { SteamProfile } from '../../api/_shared/types';
 
 interface ProfileHeaderProps {
     profile: SteamProfile;

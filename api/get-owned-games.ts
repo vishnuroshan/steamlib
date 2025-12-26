@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import type { GetOwnedGamesResponse } from '../src/core/types';
-import { normalizeOwnedGames, normalizeProfile, type RawOwnedGamesResponse, type RawPlayerSummary } from '../src/core/normalizer';
+import type { GetOwnedGamesResponse } from './_shared/types.js';
+import { normalizeOwnedGames, normalizeProfile, type RawOwnedGamesResponse, type RawPlayerSummary } from './_shared/normalizer.js';
 
 /**
  * POST /api/get-owned-games

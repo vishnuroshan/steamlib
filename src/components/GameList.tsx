@@ -6,7 +6,7 @@
  */
 
 import { useState, useMemo } from 'react';
-import type { SteamGame } from '../core/types';
+import type { SteamGame } from '../../api/_shared/types';
 import { GameCard } from './GameCard';
 
 interface GameListProps {

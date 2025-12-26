@@ -16,7 +16,7 @@ import { ProfileManager } from './components/ProfileManager';
 import { ConsentModal } from './components/ConsentModal';
 import { ThemeToggle } from './components/ThemeToggle';
 import { ProfileHeader } from './components/ProfileHeader';
-import type { SavedProfile } from './core/types';
+import type { SavedProfile } from '../api/_shared/types';
 
 function App() {
   const library = useSteamLibrary();

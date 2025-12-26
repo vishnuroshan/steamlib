@@ -4,7 +4,7 @@
  * Manages saved Steam profiles with consent-gated storage.
  */
 
-import type { SavedProfile } from '../core/types';
+import type { SavedProfile } from '../../api/_shared/types';
 
 const STORAGE_KEYS = {
     CONSENT: 'steamlib_storage_consent',

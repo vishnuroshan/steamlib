@@ -5,8 +5,8 @@
  * Ant Design inspired styling.
  */
 
-import type { ErrorCode } from '../core/types';
-import { ERROR_MESSAGES } from '../core/types';
+import type { ErrorCode } from '../../api/_shared/types';
+import { ERROR_MESSAGES } from '../../api/_shared/types';
 
 interface ErrorDisplayProps {
     error: ErrorCode;

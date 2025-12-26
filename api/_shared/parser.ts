@@ -5,7 +5,7 @@
  * No external dependencies, no environment access.
  */
 
-import type { ParsedSteamInput } from './types';
+import type { ParsedSteamInput } from './types.js';
 
 // SteamID64 is a 17-digit number
 const STEAMID64_REGEX = /^[0-9]{17}$/;

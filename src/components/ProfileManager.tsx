@@ -5,7 +5,7 @@
  * Ant Design inspired styling with touch-friendly interactions.
  */
 
-import type { SavedProfile } from '../core/types';
+import type { SavedProfile } from '../../api/_shared/types';
 
 interface ProfileManagerProps {
     profiles: SavedProfile[];

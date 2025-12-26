@@ -5,8 +5,8 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { SteamGame, ErrorCode, SavedProfile, SteamProfile } from '../core/types';
-import { parseSteamInput, needsVanityResolution } from '../core/parser';
+import type { SteamGame, SteamProfile, ErrorCode, SavedProfile } from '../../api/_shared/types';
+import { parseSteamInput, needsVanityResolution } from '../../api/_shared/parser';
 import { resolveVanityUrl, getOwnedGames } from '../api/steam';
 
 interface SteamLibraryState {

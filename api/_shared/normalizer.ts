@@ -5,7 +5,7 @@
  * No external dependencies, no environment access.
  */
 
-import type { SteamGame } from './types';
+import type { SteamGame } from './types.js';
 
 /**
  * Raw game data from Steam API (IPlayerService/GetOwnedGames)

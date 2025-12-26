@@ -4,8 +4,8 @@
  * Manages saved profiles with consent flow.
  */
 
-import { useState, useCallback, useEffect } from 'react';
-import type { SavedProfile } from '../core/types';
+import { useState, useEffect, useCallback } from 'react';
+import type { SavedProfile } from '../../api/_shared/types';
 import {
     hasStorageConsent,
     setStorageConsent,

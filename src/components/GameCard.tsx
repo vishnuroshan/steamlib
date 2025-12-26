@@ -5,8 +5,8 @@
  * Ant Design inspired styling with touch-friendly interactions.
  */
 
-import type { SteamGame } from '../core/types';
-import { formatPlaytime } from '../core/normalizer';
+import type { SteamGame } from '../../api/_shared/types';
+import { formatPlaytime } from '../../api/_shared/normalizer';
 
 interface GameCardProps {
     game: SteamGame;

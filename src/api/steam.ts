@@ -5,7 +5,7 @@
  * Calls our serverless backend, never Steam directly.
  */
 
-import type { ResolveVanityResponse, GetOwnedGamesResponse } from '../core/types';
+import type { ResolveVanityResponse, GetOwnedGamesResponse } from '../../api/_shared/types';
 
 /**
  * Resolve a Steam vanity URL to SteamID64
