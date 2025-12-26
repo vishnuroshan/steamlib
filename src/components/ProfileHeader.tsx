@@ -10,7 +10,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
     const statusColor = isOnline ? 'text-green-500' : 'text-gray-500';
 
     return (
-        <div className="flex items-center gap-4 mb-6 p-4 bg-card border border-primary rounded-lg shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="flex items-center gap-4 p-4 bg-card border border-primary rounded-lg shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
             <div className="relative">
                 <img
                     src={profile.avatarFull}

@@ -60,19 +60,12 @@ export function ProfileManager({
                             return (
                                 <div
                                     key={profile.steamId64}
-                                    className={`group flex items-center gap-3 p-3 rounded-md transition-all cursor-pointer min-h-[56px] ${isActive
+                                    className={`group flex items-center gap-3 p-3 rounded-md transition-all cursor-pointer min-h-[48px] ${isActive
                                         ? 'bg-selection border border-selection'
                                         : 'hover:bg-hover border border-transparent'
                                         }`}
                                     onClick={() => onSelect(profile)}
                                 >
-                                    {/* Avatar */}
-                                    <div className="w-8 h-8 rounded-full bg-hover flex items-center justify-center flex-shrink-0">
-                                        <span className="text-xs font-medium text-secondary">
-                                            {(profile.displayName || profile.vanityUrl || profile.steamId64)[0].toUpperCase()}
-                                        </span>
-                                    </div>
-
                                     {/* Info */}
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium text-primary truncate">

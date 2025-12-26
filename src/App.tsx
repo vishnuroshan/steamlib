@@ -57,59 +57,23 @@ function App() {
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-          {/* Main Column */}
-          <div className="flex-1 space-y-6">
-            {/* Search Section */}
-            <section className="bg-card border border-primary rounded-md p-4 md:p-6 shadow-card">
-              <h2 className="text-lg font-semibold text-primary mb-4">
-                Look up a Steam Profile
-              </h2>
-              <SteamInput
-                onSubmit={library.fetchLibrary}
-                isLoading={library.isLoading}
-                lastFailedInput={library.lastFailedInput}
-              />
-            </section>
+        <div className="space-y-6">
+          {/* Search Section */}
+          <section className="bg-card border border-primary rounded-md p-4 md:p-6 shadow-card">
+            <h2 className="text-lg font-semibold text-primary mb-4">
+              Look up a Steam Profile
+            </h2>
+            <SteamInput
+              onSubmit={library.fetchLibrary}
+              isLoading={library.isLoading}
+              lastFailedInput={library.lastFailedInput}
+            />
+          </section>
 
-            {/* Results Section */}
-            {library.isLoading && <LoadingSpinner />}
-
-            {library.error && !library.isLoading && (
-              <ErrorDisplay error={library.error} onDismiss={library.clear} />
-            )}
-
-            {library.profile && !library.isLoading && (
-              <ProfileHeader profile={library.profile} />
-            )}
-
-            {library.games && !library.isLoading && (
-              <section className="animate-in fade-in duration-300">
-                <GameList games={library.games} gameCount={library.gameCount} />
-              </section>
-            )}
-
-            {/* Empty State */}
-            {!library.games && !library.isLoading && !library.error && (
-              <div className="text-center py-12 md:py-20">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-hover flex items-center justify-center">
-                  <svg className="w-8 h-8 text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-secondary mb-2">
-                  Enter a Steam profile to begin
-                </h3>
-                <p className="text-sm text-tertiary max-w-md mx-auto">
-                  Use your Steam ID, vanity URL, or paste your full profile link to view your game library.
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <aside className="lg:w-80 flex-shrink-0">
-            <div className="lg:sticky lg:top-24">
+          {/* Profile Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Saved Profiles */}
+            <div>
               <ProfileManager
                 profiles={profiles.profiles}
                 currentSteamId64={library.currentProfile?.steamId64 ?? null}
@@ -119,7 +83,42 @@ function App() {
                 canSaveCurrent={library.currentProfile !== null}
               />
             </div>
-          </aside>
+
+            {/* Current Profile Card */}
+            {library.profile && !library.isLoading && (
+              <ProfileHeader profile={library.profile} />
+            )}
+          </div>
+
+          {/* Results Section */}
+          {library.isLoading && <LoadingSpinner />}
+
+          {library.error && !library.isLoading && (
+            <ErrorDisplay error={library.error} onDismiss={library.clear} />
+          )}
+
+          {library.games && !library.isLoading && (
+            <section className="animate-in fade-in duration-300">
+              <GameList games={library.games} gameCount={library.gameCount} />
+            </section>
+          )}
+
+          {/* Empty State */}
+          {!library.games && !library.isLoading && !library.error && (
+            <div className="text-center py-12 md:py-20">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-hover flex items-center justify-center">
+                <svg className="w-8 h-8 text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-secondary mb-2">
+                Enter a Steam profile to begin
+              </h3>
+              <p className="text-sm text-tertiary max-w-md mx-auto">
+                Use your Steam ID, vanity URL, or paste your full profile link to view your game library.
+              </p>
+            </div>
+          )}
         </div>
       </main>
 
