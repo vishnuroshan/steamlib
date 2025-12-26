@@ -23,7 +23,14 @@
   --color-success-500: #4d9e5f;
   --color-warning-500: #d49e3b;
   --color-error-500: #d44d4d;
+  --color-error-500: #d44d4d;
   --color-error-bg: rgba(212, 77, 77, 0.1);
+
+  /* Selection Colors */
+  --color-selection-bg-light: var(--color-primary-50);
+  --color-selection-border-light: var(--color-primary-200);
+  --color-selection-bg-dark: rgba(54, 95, 201, 0.2);
+  --color-selection-border-dark: rgba(54, 95, 201, 0.4);
 }
 
 /* Light theme */
@@ -55,6 +62,13 @@
   --card-bg: #ffffff;
   --input-bg: #ffffff;
   --button-bg: #ffffff;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --button-bg: #ffffff;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-light);
+  --border-selection: var(--color-selection-border-light);
 }
 
 /* Dark theme (Zed Default vibe) */
@@ -88,6 +102,13 @@
     --card-bg: #1e2024;
     --input-bg: #151619;
     --button-bg: #26282e;
+    --card-bg: #1e2024;
+    --input-bg: #151619;
+    --button-bg: #26282e;
+
+    /* Selection */
+    --bg-selection: var(--color-selection-bg-dark);
+    --border-selection: var(--color-selection-border-dark);
   }
 }
 
@@ -119,6 +140,13 @@
   --card-bg: #1e2024;
   --input-bg: #151619;
   --button-bg: #26282e;
+  --card-bg: #1e2024;
+  --input-bg: #151619;
+  --button-bg: #26282e;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-dark);
+  --border-selection: var(--color-selection-border-dark);
 }
 
 /* Manual light mode override */
@@ -150,6 +178,13 @@
   --card-bg: #ffffff;
   --input-bg: #ffffff;
   --button-bg: #ffffff;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --button-bg: #ffffff;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-light);
+  --border-selection: var(--color-selection-border-light);
 }
 
 /* Base styles */
@@ -213,4 +248,26 @@ body {
 
 @utility shadow-elevated {
   box-shadow: var(--shadow-md);
+}
+
+/* Error Utilities */
+@utility bg-error-subtle {
+  background-color: var(--color-error-bg);
+}
+
+@utility border-error-subtle {
+  border-color: rgba(212, 77, 77, 0.3);
+}
+
+@utility text-error {
+  color: var(--color-error-500);
+}
+
+/* Selection Utilities */
+@utility bg-selection {
+  background-color: var(--bg-selection);
+}
+
+@utility border-selection {
+  border-color: var(--border-selection);
 }

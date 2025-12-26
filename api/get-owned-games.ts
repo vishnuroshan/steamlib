@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import type { GetOwnedGamesResponse } from '../src/core/types';
-import { normalizeOwnedGames, type RawOwnedGamesResponse } from '../src/core/normalizer';
+import { normalizeOwnedGames, normalizeProfile, type RawOwnedGamesResponse, type RawPlayerSummary } from '../src/core/normalizer';
 
 /**
  * POST /api/get-owned-games
@@ -55,11 +55,15 @@ export default async function handler(
         // include_appinfo=1 to get game names and images
         // include_played_free_games=1 to include free-to-play games
         const steamUrl = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${apiKey}&steamid=${steamId64}&include_appinfo=1&include_played_free_games=1&format=json`;
+        const profileUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId64}`;
 
-        const response = await fetch(steamUrl);
+        const [gamesRes, profileRes] = await Promise.all([
+            fetch(steamUrl),
+            fetch(profileUrl)
+        ]);
 
-        if (!response.ok) {
-            console.error(`Steam API error: ${response.status}`);
+        if (!gamesRes.ok) {
+            console.error(`Steam API error (games): ${gamesRes.status}`);
             res.status(502).json({
                 success: false,
                 error: 'STEAM_API_ERROR',
@@ -67,10 +71,21 @@ export default async function handler(
             return;
         }
 
-        const data = await response.json() as RawOwnedGamesResponse;
+        if (!profileRes.ok) {
+            console.error(`Steam API error (profile): ${profileRes.status}`);
+            // We can still continue if profile fails, but for now let's fail
+            res.status(502).json({
+                success: false,
+                error: 'STEAM_API_ERROR',
+            } satisfies GetOwnedGamesResponse);
+            return;
+        }
+
+        const gamesData = await gamesRes.json() as RawOwnedGamesResponse;
+        const profileData = await profileRes.json() as { response: { players: RawPlayerSummary[] } };
 
         // Empty response usually means private profile or no games
-        if (!data.response || !data.response.games) {
+        if (!gamesData.response || !gamesData.response.games) {
             // Check if it's likely a private profile vs empty library
             res.status(200).json({
                 success: false,
@@ -80,7 +95,7 @@ export default async function handler(
         }
 
         // Check for empty library
-        if (data.response.games.length === 0) {
+        if (gamesData.response.games.length === 0) {
             res.status(200).json({
                 success: false,
                 error: 'EMPTY_LIBRARY',
@@ -89,12 +104,14 @@ export default async function handler(
         }
 
         // Normalize and return
-        const normalized = normalizeOwnedGames(data);
+        const normalizedGames = normalizeOwnedGames(gamesData);
+        const normalizedProfile = normalizeProfile(profileData.response.players[0]);
 
         res.status(200).json({
             success: true,
-            games: normalized.games,
-            gameCount: normalized.gameCount,
+            games: normalizedGames.games,
+            gameCount: normalizedGames.gameCount,
+            profile: normalizedProfile,
         } satisfies GetOwnedGamesResponse);
 
     } catch (error) {

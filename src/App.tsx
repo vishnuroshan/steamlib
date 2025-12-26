@@ -15,6 +15,7 @@ import { ErrorDisplay } from './components/ErrorDisplay';
 import { ProfileManager } from './components/ProfileManager';
 import { ConsentModal } from './components/ConsentModal';
 import { ThemeToggle } from './components/ThemeToggle';
+import { ProfileHeader } from './components/ProfileHeader';
 import type { SavedProfile } from './core/types';
 
 function App() {
@@ -27,9 +28,10 @@ function App() {
     if (library.currentProfile) {
       const profile: SavedProfile = {
         steamId64: library.currentProfile.steamId64,
-        displayName: null, // We don't have the display name from the API
+        displayName: library.profile?.personaname ?? null, // Use fetched name
         vanityUrl: library.currentProfile.vanityUrl,
         savedAt: Date.now(),
+        avatarUrl: library.profile?.avatarFull, // Save avatar
       };
       profiles.requestSaveProfile(profile);
     }
@@ -75,6 +77,10 @@ function App() {
 
             {library.error && !library.isLoading && (
               <ErrorDisplay error={library.error} onDismiss={library.clear} />
+            )}
+
+            {library.profile && !library.isLoading && (
+              <ProfileHeader profile={library.profile} />
             )}
 
             {library.games && !library.isLoading && (

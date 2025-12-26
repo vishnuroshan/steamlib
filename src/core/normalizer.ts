@@ -30,6 +30,22 @@ export interface RawOwnedGamesResponse {
 }
 
 /**
+ * Raw player summary from Steam API (ISteamUser/GetPlayerSummaries)
+ */
+export interface RawPlayerSummary {
+    steamid: string;
+    personaname: string;
+    profileurl: string;
+    avatar: string;
+    avatarmedium: string;
+    avatarfull: string;
+    personastate: number;
+    realname?: string;
+    loccountrycode?: string;
+    timecreated?: number;
+}
+
+/**
  * Base URL for Steam game icons/logos
  */
 const STEAM_MEDIA_BASE = 'https://media.steampowered.com/steamcommunity/public/images/apps';
@@ -100,4 +116,22 @@ export function formatPlaytime(minutes: number): string {
     }
 
     return `${Math.round(hours)} hrs`;
+}
+
+/**
+ * Normalize a raw player summary
+ */
+export function normalizeProfile(raw: RawPlayerSummary): import('./types').SteamProfile {
+    return {
+        steamId64: raw.steamid,
+        personaname: raw.personaname,
+        profileUrl: raw.profileurl,
+        avatar: raw.avatar,
+        avatarMedium: raw.avatarmedium,
+        avatarFull: raw.avatarfull,
+        personaState: raw.personastate,
+        realName: raw.realname,
+        locCountryCode: raw.loccountrycode,
+        timeCreated: raw.timecreated,
+    };
 }

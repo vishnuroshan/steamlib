@@ -5,7 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { SteamGame, ErrorCode, SavedProfile } from '../core/types';
+import type { SteamGame, ErrorCode, SavedProfile, SteamProfile } from '../core/types';
 import { parseSteamInput, needsVanityResolution } from '../core/parser';
 import { resolveVanityUrl, getOwnedGames } from '../api/steam';
 
@@ -18,6 +18,8 @@ interface SteamLibraryState {
     games: SteamGame[] | null;
     /** Total game count */
     gameCount: number;
+    /** Current profile info (from API) */
+    profile: SteamProfile | null;
     /** Current profile info (for saving) */
     currentProfile: {
         steamId64: string;
@@ -42,6 +44,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
         error: null,
         games: null,
         gameCount: 0,
+        profile: null,
         currentProfile: null,
         lastFailedInput: null,
     });
@@ -57,6 +60,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
                 error: 'INVALID_INPUT_FORMAT',
                 games: null,
                 gameCount: 0,
+                profile: null,
                 currentProfile: null,
                 lastFailedInput: input,
             }));
@@ -85,6 +89,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
                     error: vanityResult.error,
                     games: null,
                     gameCount: 0,
+                    profile: null,
                     currentProfile: null,
                     lastFailedInput: input,
                 }));
@@ -106,6 +111,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
                 error: gamesResult.error,
                 games: null,
                 gameCount: 0,
+                profile: null,
                 currentProfile: null,
                 lastFailedInput: input,
             }));
@@ -118,6 +124,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
             error: null,
             games: gamesResult.games,
             gameCount: gamesResult.gameCount,
+            profile: gamesResult.profile,
             currentProfile: { steamId64, vanityUrl },
             lastFailedInput: null,
         });
@@ -133,6 +140,7 @@ export function useSteamLibrary(): UseSteamLibraryReturn {
             error: null,
             games: null,
             gameCount: 0,
+            profile: null,
             currentProfile: null,
             lastFailedInput: null,
         });

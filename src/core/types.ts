@@ -33,6 +33,23 @@ export interface SteamGame {
 }
 
 // =============================================================================
+// Profile Data Types
+// =============================================================================
+
+export interface SteamProfile {
+    steamId64: string;
+    personaname: string;
+    profileUrl: string;
+    avatar: string;
+    avatarMedium: string;
+    avatarFull: string;
+    personaState: number; // 0 = Offline, 1 = Online, etc.
+    realName?: string;
+    locCountryCode?: string;
+    timeCreated?: number;
+}
+
+// =============================================================================
 // Profile Types (Local Storage)
 // =============================================================================
 
@@ -41,6 +58,7 @@ export interface SavedProfile {
     displayName: string | null;
     vanityUrl: string | null;
     savedAt: number;
+    avatarUrl?: string; // Cache the avatar
 }
 
 // =============================================================================
@@ -52,7 +70,7 @@ export type ResolveVanityResponse =
     | { success: false; error: ErrorCode };
 
 export type GetOwnedGamesResponse =
-    | { success: true; games: SteamGame[]; gameCount: number }
+    | { success: true; games: SteamGame[]; gameCount: number; profile: SteamProfile }
     | { success: false; error: ErrorCode };
 
 // =============================================================================

@@ -61,7 +61,7 @@ export function ProfileManager({
                                 <div
                                     key={profile.steamId64}
                                     className={`group flex items-center gap-3 p-3 rounded-md transition-all cursor-pointer min-h-[56px] ${isActive
-                                        ? 'bg-primary-50 border border-primary-200'
+                                        ? 'bg-selection border border-selection'
                                         : 'hover:bg-hover border border-transparent'
                                         }`}
                                     onClick={() => onSelect(profile)}
