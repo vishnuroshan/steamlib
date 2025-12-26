@@ -61,9 +61,9 @@ export function GameList({ games, gameCount }: GameListProps) {
         return (
             <button
                 onClick={() => handleSortClick(field)}
-                className={`min-h-[44px] px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${isActive
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-container text-secondary hover:text-primary border border-primary hover:bg-hover'
+                className={`h-8 px-3 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${isActive
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-container text-secondary hover:text-primary hover:bg-hover'
                     }`}
             >
                 {label}

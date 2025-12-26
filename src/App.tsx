@@ -36,9 +36,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-page transition-colors duration-200">
+    <div className="min-h-screen flex flex-col transition-colors duration-200">
       {/* Header */}
-      <header className="bg-container border-b border-secondary sticky top-0 z-10">
+      <header className="bg-container border-b border-primary sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold text-primary tracking-tight">
@@ -54,7 +54,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Main Column */}
           <div className="flex-1 space-y-6">

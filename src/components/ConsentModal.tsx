@@ -23,7 +23,7 @@ export function ConsentModal({ isOpen, onConfirm, onDecline }: ConsentModalProps
             />
 
             {/* Modal */}
-            <div className="relative bg-container border border-primary rounded-lg p-6 max-w-sm w-full shadow-elevated">
+            <div className="relative bg-container border border-primary rounded-md p-6 max-w-sm w-full shadow-md">
                 {/* Title */}
                 <h2 className="text-base font-semibold text-primary mb-2">
                     Save Profile Locally?
@@ -60,13 +60,13 @@ export function ConsentModal({ isOpen, onConfirm, onDecline }: ConsentModalProps
                 <div className="flex gap-3">
                     <button
                         onClick={onDecline}
-                        className="flex-1 min-h-[44px] px-4 py-2 rounded-md font-medium text-sm text-secondary bg-container border border-primary hover:bg-hover transition-colors"
+                        className="flex-1 h-8 px-4 rounded font-medium text-sm text-secondary bg-container border border-primary hover:bg-hover transition-colors"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={onConfirm}
-                        className="flex-1 min-h-[44px] px-4 py-2 rounded-md font-medium text-sm text-white bg-primary-500 hover:bg-primary-600 transition-colors"
+                        className="flex-1 h-8 px-4 rounded font-medium text-sm text-white bg-primary-500 hover:bg-primary-600 transition-colors"
                     >
                         Allow
                     </button>

@@ -1,61 +1,55 @@
 @import "tailwindcss";
 
 /*
- * Steamlib Color System
- * Based on Ant Design color palette
- * Uses CSS custom properties for light/dark theme support
+ * Steamlib Color System - Zed.dev Inspired
+ * Minimalist, developer-focused aesthetic
  */
 
 @theme {
-  /* Primary blue (Ant Design blue) */
-  --color-primary-50: #e6f4ff;
-  --color-primary-100: #bae0ff;
-  --color-primary-200: #91caff;
-  --color-primary-300: #69b1ff;
-  --color-primary-400: #4096ff;
-  --color-primary-500: #1677ff;
-  --color-primary-600: #0958d9;
-  --color-primary-700: #003eb3;
-  --color-primary-800: #002c8c;
-  --color-primary-900: #001d66;
+  /* Zed-inspired accents (Muted Blue/Purple) */
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e8ff;
+  --color-primary-200: #c7d7ff;
+  --color-primary-300: #a3bfff;
+  --color-primary-400: #7a9eff;
+  --color-primary-500: #365fc9;
+  /* Darker Blue */
+  --color-primary-600: #2d5cb5;
+  --color-primary-700: #244aa0;
+  --color-primary-800: #1e3d8a;
+  --color-primary-900: #1a2b4a;
 
-  /* Success green */
-  --color-success-500: #52c41a;
-  --color-success-600: #389e0d;
-
-  /* Warning orange */
-  --color-warning-500: #faad14;
-  --color-warning-600: #d48806;
-
-  /* Error red */
-  --color-error-50: #fff2f0;
-  --color-error-100: #ffccc7;
-  --color-error-500: #ff4d4f;
-  --color-error-600: #f5222d;
+  /* Functional Colors */
+  --color-success-500: #4d9e5f;
+  --color-warning-500: #d49e3b;
+  --color-error-500: #d44d4d;
+  --color-error-bg: rgba(212, 77, 77, 0.1);
 }
 
-/* Light theme (default) */
+/* Light theme */
 :root {
   /* Backgrounds */
-  --bg-page: #f5f5f5;
+  --bg-page: #f7f8fa;
+  /* Off-white for light mode */
   --bg-container: #ffffff;
   --bg-elevated: #ffffff;
-  --bg-hover: #f5f5f5;
-  --bg-active: #e6f4ff;
+  --bg-hover: #ebecf0;
+  --bg-active: #e4e5e9;
 
   /* Text */
-  --text-primary: rgba(0, 0, 0, 0.88);
-  --text-secondary: rgba(0, 0, 0, 0.65);
-  --text-tertiary: rgba(0, 0, 0, 0.45);
-  --text-disabled: rgba(0, 0, 0, 0.25);
+  --text-primary: #151619;
+  --text-secondary: #5d5f66;
+  --text-tertiary: #9ea0a6;
+  --text-disabled: #a0a1a7;
+  /* Darker for better visibility */
 
   /* Borders */
-  --border-primary: #d9d9d9;
-  --border-secondary: #f0f0f0;
+  --border-primary: #e4e4e6;
+  --border-secondary: #f0f0f2;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  /* Shadows - Very subtle/flat */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
   /* Component specific */
   --card-bg: #ffffff;
@@ -63,88 +57,94 @@
   --button-bg: #ffffff;
 }
 
-/* Dark theme */
+/* Dark theme (Zed Default vibe) */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     /* Backgrounds */
-    --bg-page: #141414;
-    --bg-container: #1f1f1f;
-    --bg-elevated: #262626;
-    --bg-hover: #303030;
-    --bg-active: #111d2c;
+    --bg-page: #151619;
+    /* Editor BG */
+    --bg-container: #1e2024;
+    /* Panel BG */
+    --bg-elevated: #26282e;
+    --bg-hover: #2e3035;
+    --bg-active: #383a40;
 
     /* Text */
-    --text-primary: rgba(255, 255, 255, 0.88);
-    --text-secondary: rgba(255, 255, 255, 0.65);
-    --text-tertiary: rgba(255, 255, 255, 0.45);
-    --text-disabled: rgba(255, 255, 255, 0.25);
+    --text-primary: #e1e1e6;
+    --text-secondary: #8d8f99;
+    --text-tertiary: #5d5f66;
+    --text-disabled: #5d5f66;
+    /* More visible */
 
     /* Borders */
-    --border-primary: #424242;
-    --border-secondary: #303030;
+    --border-primary: #2e3035;
+    --border-secondary: #26282e;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.4);
+    /* Shadows - Almost none in dark mode */
+    --shadow-sm: none;
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
 
     /* Component specific */
-    --card-bg: #1f1f1f;
-    --input-bg: #1f1f1f;
-    --button-bg: #1f1f1f;
+    --card-bg: #1e2024;
+    --input-bg: #151619;
+    --button-bg: #26282e;
   }
 }
 
 /* Manual dark mode override */
 :root.dark {
   /* Backgrounds */
-  --bg-page: #141414;
-  --bg-container: #1f1f1f;
-  --bg-elevated: #262626;
-  --bg-hover: #303030;
-  --bg-active: #111d2c;
+  --bg-page: #151619;
+  --bg-container: #1e2024;
+  --bg-elevated: #26282e;
+  --bg-hover: #2e3035;
+  --bg-active: #383a40;
 
   /* Text */
-  --text-primary: rgba(255, 255, 255, 0.88);
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-tertiary: rgba(255, 255, 255, 0.45);
-  --text-disabled: rgba(255, 255, 255, 0.25);
+  --text-primary: #e1e1e6;
+  --text-secondary: #8d8f99;
+  --text-tertiary: #5d5f66;
+  --text-disabled: #5d5f66;
+  /* More visible */
 
   /* Borders */
-  --border-primary: #424242;
-  --border-secondary: #303030;
+  --border-primary: #2e3035;
+  --border-secondary: #26282e;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: none;
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
 
   /* Component specific */
-  --card-bg: #1f1f1f;
-  --input-bg: #1f1f1f;
-  --button-bg: #1f1f1f;
+  --card-bg: #1e2024;
+  --input-bg: #151619;
+  --button-bg: #26282e;
 }
 
 /* Manual light mode override */
 :root.light {
   /* Backgrounds */
-  --bg-page: #f5f5f5;
+  --bg-page: #f7f8fa;
+  /* Off-white */
   --bg-container: #ffffff;
   --bg-elevated: #ffffff;
-  --bg-hover: #f5f5f5;
-  --bg-active: #e6f4ff;
+  --bg-hover: #ebecf0;
+  --bg-active: #e4e5e9;
 
   /* Text */
-  --text-primary: rgba(0, 0, 0, 0.88);
-  --text-secondary: rgba(0, 0, 0, 0.65);
-  --text-tertiary: rgba(0, 0, 0, 0.45);
-  --text-disabled: rgba(0, 0, 0, 0.25);
+  --text-primary: #151619;
+  --text-secondary: #5d5f66;
+  --text-tertiary: #9ea0a6;
+  --text-disabled: #a0a1a7;
+  /* Darker for better visibility */
 
   /* Borders */
-  --border-primary: #d9d9d9;
-  --border-secondary: #f0f0f0;
+  --border-primary: #e4e4e6;
+  --border-secondary: #f0f0f2;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
   /* Component specific */
   --card-bg: #ffffff;
@@ -154,14 +154,15 @@
 
 /* Base styles */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-page);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%235a9cfb' fill-opacity='0.16'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Utility classes using CSS variables */
+/* Utility classes */
 @utility bg-page {
   background-color: var(--bg-page);
 }

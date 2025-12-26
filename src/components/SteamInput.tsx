@@ -39,7 +39,7 @@ export function SteamInput({ onSubmit, isLoading, lastFailedInput }: SteamInputP
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Steam ID, Vanity URL, or Profile Link"
-                        className="w-full min-h-[48px] px-4 py-3 bg-container border border-primary rounded-md text-primary placeholder-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-sm"
+                        className="w-full h-8 px-3 bg-container border border-primary rounded text-primary placeholder-tertiary focus:outline-none focus:border-primary-500 transition-colors text-sm font-medium"
                         disabled={isLoading}
                     />
                 </div>
@@ -48,9 +48,9 @@ export function SteamInput({ onSubmit, isLoading, lastFailedInput }: SteamInputP
                 <button
                     type="submit"
                     disabled={isDisabled}
-                    className={`min-h-[48px] px-6 py-3 rounded-md font-medium text-sm transition-all flex items-center justify-center gap-2 ${isDisabled
-                            ? 'bg-hover text-disabled cursor-not-allowed border border-primary'
-                            : 'bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700'
+                    className={`h-8 px-4 rounded font-medium text-sm transition-colors flex items-center justify-center gap-2 ${isDisabled
+                        ? 'bg-container text-disabled cursor-not-allowed border border-primary opacity-75'
+                        : 'bg-primary-500 text-white hover:bg-primary-600'
                         }`}
                 >
                     {isLoading ? (

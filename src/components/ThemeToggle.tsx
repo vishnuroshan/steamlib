@@ -13,7 +13,7 @@ export function ThemeToggle({ resolvedTheme, onToggle }: ThemeToggleProps) {
     return (
         <button
             onClick={onToggle}
-            className="min-h-[44px] min-w-[44px] p-2.5 rounded-md bg-container border border-primary hover:bg-hover transition-colors flex items-center justify-center"
+            className="h-8 w-8 p-1.5 rounded bg-container border border-primary hover:bg-hover transition-colors flex items-center justify-center"
             aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
         >
             {resolvedTheme === 'dark' ? (

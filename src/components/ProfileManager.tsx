@@ -29,14 +29,14 @@ export function ProfileManager({
         : false;
 
     return (
-        <div className="bg-card border border-primary rounded-md shadow-card">
+        <div className="bg-card border border-primary rounded">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-secondary">
                 <h3 className="font-medium text-primary text-sm">Saved Profiles</h3>
                 {canSaveCurrent && !isCurrentSaved && onSaveCurrent && (
                     <button
                         onClick={onSaveCurrent}
-                        className="min-h-[44px] px-3 py-2 text-xs text-primary-500 hover:text-primary-600 hover:bg-hover rounded transition-colors flex items-center gap-1"
+                        className="h-8 px-3 text-xs text-primary-500 hover:text-primary-600 hover:bg-hover rounded transition-colors flex items-center gap-1"
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -61,8 +61,8 @@ export function ProfileManager({
                                 <div
                                     key={profile.steamId64}
                                     className={`group flex items-center gap-3 p-3 rounded-md transition-all cursor-pointer min-h-[56px] ${isActive
-                                            ? 'bg-primary-50 border border-primary-200'
-                                            : 'hover:bg-hover border border-transparent'
+                                        ? 'bg-primary-50 border border-primary-200'
+                                        : 'hover:bg-hover border border-transparent'
                                         }`}
                                     onClick={() => onSelect(profile)}
                                 >

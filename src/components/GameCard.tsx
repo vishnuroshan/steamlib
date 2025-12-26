@@ -14,10 +14,10 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
     return (
-        <div className="group bg-card border border-primary rounded-md p-3 shadow-card hover:shadow-elevated hover:border-primary-400 transition-all duration-200 min-h-[60px]">
+        <div className="group bg-card border border-primary rounded p-3 hover:bg-hover transition-colors duration-150 min-h-[60px]">
             <div className="flex items-center gap-3">
                 {/* Game Icon - 32x32 mobile, 40x40 desktop */}
-                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded overflow-hidden bg-hover">
+                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-sm overflow-hidden bg-hover">
                     {game.iconUrl ? (
                         <img
                             src={game.iconUrl}
