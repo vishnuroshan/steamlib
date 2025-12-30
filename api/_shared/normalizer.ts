@@ -91,6 +91,7 @@ export function normalizeOwnedGames(raw: RawOwnedGamesResponse): {
     gameCount: number;
 } {
     const response = raw.response;
+    console.log(response.games)
     const games = response.games ?? [];
 
     return {

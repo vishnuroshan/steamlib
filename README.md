@@ -1,3 +1,30 @@
+# Steamlib
+
+## Local Development
+
+To run the application locally with both the frontend and the API server:
+
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+2.  **Set up environment variables**:
+    Create a `.env.local` file in the root directory and add your Steam API Key:
+    ```env
+    STEAM_API_KEY=your_api_key_here
+    ```
+
+3.  **Run the app**:
+    ```bash
+    npm run dev:full
+    ```
+    This will start:
+    - Vite dev server (frontend) on `http://localhost:5173`
+    - Express dev server (API) on `http://localhost:3001`
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
