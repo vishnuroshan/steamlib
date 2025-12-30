@@ -5,6 +5,7 @@
  * Ant Design inspired styling with touch-friendly interactions.
  */
 
+import { useState } from 'react';
 import type { SteamGame } from '../../api/_shared/types';
 import { formatPlaytime } from '../../api/_shared/normalizer';
 
@@ -13,29 +14,45 @@ interface GameCardProps {
 }
 
 export function GameCard({ game }: GameCardProps) {
+    const [imgError, setImgError] = useState(false);
+
     return (
         <div className="group relative bg-card border border-primary rounded-lg overflow-hidden hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1">
             {/* Aspect Ratio Container (2:3) */}
             <div className="relative aspect-[2/3] overflow-hidden bg-hover">
-                {game.coverUrl ? (
+                {game.coverUrl && !imgError ? (
                     <img
                         src={game.coverUrl}
                         alt={game.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
-                        onError={(e) => {
-                            // Fallback to logo if cover fails
-                            const target = e.target as HTMLImageElement;
-                            if (game.logoUrl && target.src !== game.logoUrl) {
-                                target.src = game.logoUrl;
-                            }
-                        }}
+                        onError={() => setImgError(true)}
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center text-tertiary">
-                        <svg className="w-8 h-8 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                    <div className="w-full h-full flex items-center justify-center p-6 text-center bg-gradient-to-br from-primary-900/40 to-black/60">
+                        {/* Subtle "No Image" Indicator */}
+                        <div className="absolute top-2 right-2 opacity-30">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-4 h-4 text-primary-100 lucide lucide-image-off"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <line x1="2" x2="22" y1="2" y2="22" />
+                                <path d="M10.41 10.41a2 2 0 1 1-2.83-2.83" />
+                                <line x1="13.5" x2="6" y1="13.5" y2="21" />
+                                <line x1="18" x2="21" y1="12" y2="15" />
+                                <path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59" />
+                                <path d="M21 15V5a2 2 0 0 0-2-2H9" />
+                            </svg>
+                        </div>
+                        <span className="text-primary-100 font-bold text-base leading-tight drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                            {game.name}
+                        </span>
                     </div>
                 )}
 
