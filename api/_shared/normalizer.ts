@@ -67,6 +67,13 @@ function buildLogoUrl(appId: number, logoHash: string | undefined): string | nul
 }
 
 /**
+ * Build vertical cover URL from app ID
+ */
+function buildCoverUrl(appId: number): string {
+    return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/library_600x900_2x.jpg`;
+}
+
+/**
  * Normalize a single game from raw Steam API data
  */
 function normalizeGame(raw: RawSteamGame): SteamGame {
@@ -77,6 +84,7 @@ function normalizeGame(raw: RawSteamGame): SteamGame {
         playtimeRecentMinutes: raw.playtime_2weeks ?? null,
         iconUrl: buildIconUrl(raw.appid, raw.img_icon_url),
         logoUrl: buildLogoUrl(raw.appid, raw.img_logo_url),
+        coverUrl: buildCoverUrl(raw.appid),
     };
 }
 

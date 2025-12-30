@@ -30,6 +30,7 @@ export interface SteamGame {
     playtimeRecentMinutes: number | null;
     iconUrl: string | null;
     logoUrl: string | null;
+    coverUrl: string | null;
 }
 
 // =============================================================================
