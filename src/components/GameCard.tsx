@@ -15,6 +15,7 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
     const [imgError, setImgError] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
 
     return (
         <div className="group relative bg-card border border-primary rounded-lg overflow-hidden hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1">
@@ -24,8 +25,9 @@ export function GameCard({ game }: GameCardProps) {
                     <img
                         src={game.coverUrl}
                         alt={game.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imgLoaded ? 'image-loaded' : 'opacity-0'}`}
                         loading="lazy"
+                        onLoad={() => setImgLoaded(true)}
                         onError={() => setImgError(true)}
                     />
                 ) : (
