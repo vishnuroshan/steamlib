@@ -40,7 +40,7 @@ async function getIgdbAccessToken() {
 export async function POST(request: Request) {
     try {
         const { appIds } = await request.json();
-
+        console.log('Fetching details for appIds:', appIds?.length);
         if (!appIds || !Array.isArray(appIds)) {
             return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
         }
@@ -52,10 +52,13 @@ export async function POST(request: Request) {
             .select('*')
             .in('appid', appIds);
 
+        console.log('Found in cache:', cachedData?.length);
+
         if (fetchError) throw fetchError;
 
         const cachedAppIds = (cachedData as any[])?.map(d => d.appid) || [];
         const missingAppIds = appIds.filter(id => !cachedAppIds.includes(id));
+        console.log('Missing appIds:', missingAppIds.length);
 
         let freshlyFetched: Database['public']['Tables']['game_metadata']['Insert'][] = [];
 
@@ -64,7 +67,7 @@ export async function POST(request: Request) {
 
             const query = `
                 fields game.name, game.genres.name, game.total_rating, game.summary, uid;
-                where uid = (${missingAppIds.map(id => `"${id}"`).join(',')}) & category = 1;
+                where uid = ("${missingAppIds.join('", "')}") & external_game_source = 1;
                 limit 500;
             `;
 
