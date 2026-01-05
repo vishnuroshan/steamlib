@@ -66,8 +66,8 @@ export async function POST(request: Request) {
             const token = await getIgdbAccessToken();
 
             const query = `
-                fields game.name, game.genres.name, game.total_rating, game.summary, uid;
-                where uid = ("${missingAppIds.join('", "')}") & external_game_source = 1;
+                fields game.name, game.genres.name, game.total_rating, game.summary, game.release_dates.y, game.platforms.name, uid, external_game_source;
+                where uid = ("${missingAppIds.join('", "')}") & external_game_source = 3;
                 limit 500;
             `;
 
@@ -89,6 +89,9 @@ export async function POST(request: Request) {
                     igdb_id: item.game.id,
                     name: item.game.name,
                     genres: item.game.genres?.map((g: any) => g.name) || [],
+                    year: item.game.release_dates?.[0]?.y || null,
+                    platforms: item.game.platforms?.map((p: any) => p.name) || [],
+                    external_game_source: item.external_game_source,
                     rating: item.game.total_rating,
                     summary: item.game.summary,
                     updated_at: new Date().toISOString()

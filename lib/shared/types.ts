@@ -75,6 +75,9 @@ export interface GameMetadata {
     igdb_id?: number;
     name: string;
     genres: string[];
+    year?: number;
+    platforms?: string[];
+    external_game_source?: number;
     rating?: number;
     summary?: string;
 }

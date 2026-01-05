@@ -28,7 +28,6 @@ export function GameList({ games, gameCount }: GameListProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
     const searchInputRef = useRef<HTMLInputElement>(null);
-
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     // Keyboard shortcut to focus search (/)

@@ -15,6 +15,9 @@ export interface Database {
                     igdb_id: number | null
                     name: string | null
                     genres: string[] | null
+                    year: number | null
+                    platforms: string[] | null
+                    external_game_source: number | null
                     rating: number | null
                     summary: string | null
                     updated_at: string | null
@@ -24,6 +27,9 @@ export interface Database {
                     igdb_id?: number | null
                     name?: string | null
                     genres?: string[] | null
+                    year?: number | null
+                    platforms?: string[] | null
+                    external_game_source?: number | null
                     rating?: number | null
                     summary?: string | null
                     updated_at?: string | null
@@ -33,6 +39,9 @@ export interface Database {
                     igdb_id?: number | null
                     name?: string | null
                     genres?: string[] | null
+                    year?: number | null
+                    platforms?: string[] | null
+                    external_game_source?: number | null
                     rating?: number | null
                     summary?: string | null
                     updated_at?: string | null
