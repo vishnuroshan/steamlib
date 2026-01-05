@@ -1,13 +1,8 @@
-/**
- * GameCard Component
- * 
- * Displays a single game with icon, name, and playtime.
- * Ant Design inspired styling with touch-friendly interactions.
- */
-
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import type { SteamGame } from '../../api/_shared/types';
 import { formatPlaytime } from '../../api/_shared/normalizer';
+import { useGameMetadata } from '../hooks/useGameMetadata';
+import { GameDetailsPopover } from './GameDetailsPopover';
 
 interface GameCardProps {
     game: SteamGame;
@@ -15,19 +10,41 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
     const [imgError, setImgError] = useState(false);
-    const [imgLoaded, setImgLoaded] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
+    const { fetchMetadata, getMetadataForGame, loading } = useGameMetadata();
+
+    const gameMetadata = getMetadataForGame(game.appId);
+
+    const handleOpenDetails = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation();
+        setShowDetails(true);
+        if (!gameMetadata) {
+            fetchMetadata([game.appId]);
+        }
+    }, [game.appId, gameMetadata, fetchMetadata]);
+
+    const handleCardClick = useCallback((e: React.MouseEvent) => {
+        // On mobile, clicking the card opens details
+        // We'll detect mobile by checking if it's a touch device or window width
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile) {
+            handleOpenDetails(e);
+        }
+    }, [handleOpenDetails]);
 
     return (
-        <div className="group relative bg-card border border-primary rounded-lg overflow-hidden hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1">
+        <div
+            className="group relative bg-card border border-primary rounded-lg overflow-hidden hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 cursor-pointer"
+            onClick={handleCardClick}
+        >
             {/* Aspect Ratio Container (2:3) */}
             <div className="relative aspect-[2/3] overflow-hidden bg-hover">
                 {game.coverUrl && !imgError ? (
                     <img
                         src={game.coverUrl}
                         alt={game.name}
-                        className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imgLoaded ? 'image-loaded' : 'opacity-0'}`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
-                        onLoad={() => setImgLoaded(true)}
                         onError={() => setImgError(true)}
                     />
                 ) : (
@@ -59,14 +76,38 @@ export function GameCard({ game }: GameCardProps) {
                 )}
 
                 {/* Gradient Overlay for Text Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+
+                {/* Info Icon - Desktop only hover action */}
+                <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <button
+                        onClick={handleOpenDetails}
+                        className="p-3 rounded-full bg-primary-500/80 text-white backdrop-blur-md border border-white/20 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary-600 hover:scale-110 shadow-2xl"
+                        title="View Details"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-info"
+                        >
+                            <circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />
+                        </svg>
+                    </button>
+                </div>
 
                 {/* Content Overlay (Glassmorphism) */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 backdrop-blur-sm bg-black/20 border-t border-white/10">
+                <div className="absolute bottom-0 left-0 right-0 p-3 backdrop-blur-md bg-black/40 border-t border-white/10">
                     <h3 className="font-bold text-white text-sm line-clamp-1 group-hover:text-primary-400 transition-colors">
                         {game.name}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2 mt-1">
+
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
                         <span className="text-white/70 text-[10px] font-medium uppercase tracking-wider">
                             {formatPlaytime(game.playtimeMinutes)}
                         </span>
@@ -81,6 +122,16 @@ export function GameCard({ game }: GameCardProps) {
 
             {/* Hover Glow Effect */}
             <div className="absolute inset-0 pointer-events-none border-2 border-primary-500/0 group-hover:border-primary-500/50 rounded-lg transition-all duration-300" />
+
+            {/* Premium Details Popover */}
+            {showDetails && (
+                <GameDetailsPopover
+                    gameName={game.name}
+                    metadata={gameMetadata}
+                    loading={loading}
+                    onClose={() => setShowDetails(false)}
+                />
+            )}
         </div>
     );
 }

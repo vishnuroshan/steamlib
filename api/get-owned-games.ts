@@ -42,6 +42,7 @@ export default async function handler(
 
     // Get Steam API key from environment
     const apiKey = process.env.STEAM_API_KEY;
+    console.log('STEAM_API_KEY present:', !!apiKey);
     if (!apiKey) {
         console.error('STEAM_API_KEY not configured');
         res.status(500).json({
@@ -57,27 +58,31 @@ export default async function handler(
         const steamUrl = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${apiKey}&steamid=${steamId64}&include_appinfo=1&include_played_free_games=1&format=json`;
         const profileUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId64}`;
 
+        console.log('Fetching from Steam API...');
         const [gamesRes, profileRes] = await Promise.all([
             fetch(steamUrl),
             fetch(profileUrl)
         ]);
 
         if (!gamesRes.ok) {
-            console.error(`Steam API error (games): ${gamesRes.status}`);
-            res.status(502).json({
+            const errorText = await gamesRes.text();
+            console.error(`Steam API error (games): ${gamesRes.status} ${gamesRes.statusText} - Content: ${errorText}`);
+            res.status(gamesRes.status).json({
                 success: false,
                 error: 'STEAM_API_ERROR',
-            } satisfies GetOwnedGamesResponse);
+                _debug: { status: gamesRes.status, statusText: gamesRes.statusText }
+            } as any);
             return;
         }
 
         if (!profileRes.ok) {
-            console.error(`Steam API error (profile): ${profileRes.status}`);
-            // We can still continue if profile fails, but for now let's fail
-            res.status(502).json({
+            const errorText = await profileRes.text();
+            console.error(`Steam API error (profile): ${profileRes.status} ${profileRes.statusText} - Content: ${errorText}`);
+            res.status(profileRes.status).json({
                 success: false,
                 error: 'STEAM_API_ERROR',
-            } satisfies GetOwnedGamesResponse);
+                _debug: { status: profileRes.status, statusText: profileRes.statusText }
+            } as any);
             return;
         }
 
