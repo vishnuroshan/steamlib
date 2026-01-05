@@ -1,0 +1,285 @@
+@import "tailwindcss";
+
+/*
+ * Smooth Scrolling
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+ * Image Load Animation
+ */
+@keyframes image-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-loaded {
+  animation: image-fade-in 0.3s ease-out forwards;
+}
+
+/*
+ * Steamlib Color System - Zed.dev Inspired
+ * Minimalist, developer-focused aesthetic
+ */
+
+@theme {
+  /* Zed-inspired accents (Muted Blue/Purple) */
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e8ff;
+  --color-primary-200: #c7d7ff;
+  --color-primary-300: #a3bfff;
+  --color-primary-400: #7a9eff;
+  --color-primary-500: #365fc9;
+  /* Darker Blue */
+  --color-primary-600: #2d5cb5;
+  --color-primary-700: #244aa0;
+  --color-primary-800: #1e3d8a;
+  --color-primary-900: #1a2b4a;
+
+  /* Functional Colors */
+  --color-success-500: #4d9e5f;
+  --color-warning-500: #d49e3b;
+  --color-error-500: #d44d4d;
+  --color-error-bg: rgba(212, 77, 77, 0.1);
+
+  /* Selection Colors */
+  --color-selection-bg-light: var(--color-primary-50);
+  --color-selection-border-light: var(--color-primary-200);
+  --color-selection-bg-dark: rgba(54, 95, 201, 0.2);
+  --color-selection-border-dark: rgba(54, 95, 201, 0.4);
+}
+
+/* Light theme */
+:root {
+  /* Backgrounds */
+  --bg-page: #f7f8fa;
+  /* Off-white for light mode */
+  --bg-container: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #ebecf0;
+  --bg-active: #e4e5e9;
+
+  /* Text */
+  --text-primary: #151619;
+  --text-secondary: #5d5f66;
+  --text-tertiary: #9ea0a6;
+  --text-disabled: #a0a1a7;
+  /* Darker for better visibility */
+
+  /* Borders */
+  --border-primary: #e4e4e6;
+  --border-secondary: #f0f0f2;
+
+  /* Shadows - Very subtle/flat */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  /* Component specific */
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --button-bg: #ffffff;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-light);
+  --border-selection: var(--color-selection-border-light);
+}
+
+/* Dark theme (Zed Default vibe) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    /* Backgrounds */
+    --bg-page: #151619;
+    /* Editor BG */
+    --bg-container: #1e2024;
+    /* Panel BG */
+    --bg-elevated: #26282e;
+    --bg-hover: #2e3035;
+    --bg-active: #383a40;
+
+    /* Text */
+    --text-primary: #e1e1e6;
+    --text-secondary: #8d8f99;
+    --text-tertiary: #5d5f66;
+    --text-disabled: #5d5f66;
+    /* More visible */
+
+    /* Borders */
+    --border-primary: #2e3035;
+    --border-secondary: #26282e;
+
+    /* Shadows - Almost none in dark mode */
+    --shadow-sm: none;
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    /* Component specific */
+    --card-bg: #1e2024;
+    --input-bg: #151619;
+    --button-bg: #26282e;
+
+    /* Selection */
+    --bg-selection: var(--color-selection-bg-dark);
+    --border-selection: var(--color-selection-border-dark);
+  }
+}
+
+/* Manual dark mode override */
+:root.dark {
+  /* Backgrounds */
+  --bg-page: #151619;
+  --bg-container: #1e2024;
+  --bg-elevated: #26282e;
+  --bg-hover: #2e3035;
+  --bg-active: #383a40;
+
+  /* Text */
+  --text-primary: #e1e1e6;
+  --text-secondary: #8d8f99;
+  --text-tertiary: #5d5f66;
+  --text-disabled: #5d5f66;
+  /* More visible */
+
+  /* Borders */
+  --border-primary: #2e3035;
+  --border-secondary: #26282e;
+
+  /* Shadows */
+  --shadow-sm: none;
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  /* Component specific */
+  --card-bg: #1e2024;
+  --input-bg: #151619;
+  --button-bg: #26282e;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-dark);
+  --border-selection: var(--color-selection-border-dark);
+}
+
+/* Manual light mode override */
+:root.light {
+  /* Backgrounds */
+  --bg-page: #f7f8fa;
+  /* Off-white */
+  --bg-container: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #ebecf0;
+  --bg-active: #e4e5e9;
+
+  /* Text */
+  --text-primary: #151619;
+  --text-secondary: #5d5f66;
+  --text-tertiary: #9ea0a6;
+  --text-disabled: #a0a1a7;
+  /* Darker for better visibility */
+
+  /* Borders */
+  --border-primary: #e4e4e6;
+  --border-secondary: #f0f0f2;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  /* Component specific */
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --button-bg: #ffffff;
+
+  /* Selection */
+  --bg-selection: var(--color-selection-bg-light);
+  --border-selection: var(--color-selection-border-light);
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-page);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%235a9cfb' fill-opacity='0.16'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility classes */
+@utility bg-page {
+  background-color: var(--bg-page);
+}
+
+@utility bg-container {
+  background-color: var(--bg-container);
+}
+
+@utility bg-elevated {
+  background-color: var(--bg-elevated);
+}
+
+@utility bg-hover {
+  background-color: var(--bg-hover);
+}
+
+@utility bg-card {
+  background-color: var(--card-bg);
+}
+
+@utility text-primary {
+  color: var(--text-primary);
+}
+
+@utility text-secondary {
+  color: var(--text-secondary);
+}
+
+@utility text-tertiary {
+  color: var(--text-tertiary);
+}
+
+@utility text-disabled {
+  color: var(--text-disabled);
+}
+
+@utility border-primary {
+  border-color: var(--border-primary);
+}
+
+@utility border-secondary {
+  border-color: var(--border-secondary);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-sm);
+}
+
+@utility shadow-elevated {
+  box-shadow: var(--shadow-md);
+}
+
+/* Error Utilities */
+@utility bg-error-subtle {
+  background-color: var(--color-error-bg);
+}
+
+@utility border-error-subtle {
+  border-color: rgba(212, 77, 77, 0.3);
+}
+
+@utility text-error {
+  color: var(--color-error-500);
+}
+
+/* Selection Utilities */
+@utility bg-selection {
+  background-color: var(--bg-selection);
+}
+
+@utility border-selection {
+  border-color: var(--border-selection);
+}

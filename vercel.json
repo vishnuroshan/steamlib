@@ -1,6 +1,13 @@
 {
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    "framework": "nextjs",
+    "buildCommand": "next build",
+    "installCommand": "npm install",
+    "devCommand": "next dev",
+    "ignoreCommand": "bash -c 'if [ \"$VERCEL_ENV\" == \"production\" ]; then exit 1; else exit 0; fi'",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/$1"
+        }
+    ]
 }
