@@ -1,12 +1,27 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+import { Database } from '@/lib/database.types';
+
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 const igdbClientId = process.env.IGDB_CLIENT_ID;
 const igdbClientSecret = process.env.IGDB_CLIENT_SECRET;
 
-const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+let supabaseInstance: ReturnType<typeof createClient<Database>> | null = null;
+
+function getSupabase() {
+    if (supabaseInstance) return supabaseInstance;
+
+    // In build context or if vars are missing, we can't create a valid client.
+    // We return null or throw depending on usage, but for the API route we expect them to exist at runtime.
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase credentials not configured');
+    }
+
+    supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey);
+    return supabaseInstance;
+}
 
 let igdbAccessToken: string | null = null;
 
@@ -30,6 +45,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
         }
 
+        const supabase = getSupabase();
+
         const { data: cachedData, error: fetchError } = await supabase
             .from('game_metadata')
             .select('*')
@@ -37,10 +54,10 @@ export async function POST(request: Request) {
 
         if (fetchError) throw fetchError;
 
-        const cachedAppIds = cachedData?.map(d => d.appid) || [];
+        const cachedAppIds = (cachedData as any[])?.map(d => d.appid) || [];
         const missingAppIds = appIds.filter(id => !cachedAppIds.includes(id));
 
-        let freshlyFetched: any[] = [];
+        let freshlyFetched: Database['public']['Tables']['game_metadata']['Insert'][] = [];
 
         if (missingAppIds.length > 0) {
             const token = await getIgdbAccessToken();
