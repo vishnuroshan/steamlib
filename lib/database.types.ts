@@ -15,6 +15,9 @@ export interface Database {
                     igdb_id: number | null
                     name: string | null
                     genres: string[] | null
+                    year: number | null
+                    platforms: string[] | null
+                    external_game_source: number | null
                     rating: number | null
                     summary: string | null
                     updated_at: string | null
@@ -24,6 +27,9 @@ export interface Database {
                     igdb_id?: number | null
                     name?: string | null
                     genres?: string[] | null
+                    year?: number | null
+                    platforms?: string[] | null
+                    external_game_source?: number | null
                     rating?: number | null
                     summary?: string | null
                     updated_at?: string | null
@@ -33,8 +39,32 @@ export interface Database {
                     igdb_id?: number | null
                     name?: string | null
                     genres?: string[] | null
+                    year?: number | null
+                    platforms?: string[] | null
+                    external_game_source?: number | null
                     rating?: number | null
                     summary?: string | null
+                    updated_at?: string | null
+                }
+                Relationships: []
+            }
+            user_profiles: {
+                Row: {
+                    steam_id: string
+                    username: string | null
+                    avatar_url: string | null
+                    updated_at: string | null
+                }
+                Insert: {
+                    steam_id: string
+                    username?: string | null
+                    avatar_url?: string | null
+                    updated_at?: string | null
+                }
+                Update: {
+                    steam_id?: string
+                    username?: string | null
+                    avatar_url?: string | null
                     updated_at?: string | null
                 }
                 Relationships: []

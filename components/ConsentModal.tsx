@@ -26,32 +26,32 @@ export function ConsentModal({ isOpen, onConfirm, onDecline }: ConsentModalProps
             <div className="relative bg-container border border-primary rounded-md p-6 max-w-sm w-full shadow-md">
                 {/* Title */}
                 <h2 className="text-base font-semibold text-primary mb-2">
-                    Save Profile Locally?
+                    Store Public Info?
                 </h2>
 
                 {/* Description */}
                 <div className="space-y-3 text-secondary text-sm mb-6">
                     <p>
-                        Your profile data will be stored in this browser for quick access.
+                        We store your public profile info (Username & Steam ID) to improve your experience.
                     </p>
                     <ul className="space-y-2 text-tertiary text-xs">
                         <li className="flex items-start gap-2">
                             <svg className="w-4 h-4 text-success-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>Data stays only in this browser</span>
+                            <span>Library data is fetched live & never saved</span>
                         </li>
                         <li className="flex items-start gap-2">
                             <svg className="w-4 h-4 text-success-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>You can remove it anytime</span>
+                            <span>Only public profile info is stored</span>
                         </li>
                         <li className="flex items-start gap-2">
                             <svg className="w-4 h-4 text-success-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>No data is sent to any server</span>
+                            <span>You can remove your data anytime</span>
                         </li>
                     </ul>
                 </div>

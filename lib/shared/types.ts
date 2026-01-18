@@ -31,6 +31,10 @@ export interface SteamGame {
     iconUrl: string | null;
     logoUrl: string | null;
     coverUrl: string | null;
+    // Rich metadata (Optional as it comes from a different source)
+    platforms?: string[];
+    genres?: string[];
+    releaseYear?: number;
 }
 
 // =============================================================================
@@ -75,6 +79,9 @@ export interface GameMetadata {
     igdb_id?: number;
     name: string;
     genres: string[];
+    year?: number;
+    platforms?: string[];
+    external_game_source?: number;
     rating?: number;
     summary?: string;
 }

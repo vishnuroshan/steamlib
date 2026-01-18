@@ -24,11 +24,14 @@ interface SortState {
 }
 
 export function GameList({ games, gameCount }: GameListProps) {
+    const [platformFilter, setPlatformFilter] = useState<string>('All');
+    const [groupByGenre, setGroupByGenre] = useState(false);
+
+    // Restored State
     const [sort, setSort] = useState<SortState>({ field: 'playtime', direction: 'desc' });
     const [searchQuery, setSearchQuery] = useState('');
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
     const searchInputRef = useRef<HTMLInputElement>(null);
-
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     // Keyboard shortcut to focus search (/)
@@ -44,8 +47,25 @@ export function GameList({ games, gameCount }: GameListProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    // Extract unique platforms for filters (Memoized)
+    // Only show PC-relevant platforms since this is a Steam library
+    const availablePlatforms = useMemo(() => {
+        const platforms = new Set<string>();
+        games.forEach(game => {
+            game.platforms?.forEach(p => {
+                // Only include PC/Steam-relevant platforms
+                if (p.includes('Windows') || p.includes('PC')) platforms.add('Windows');
+                else if (p.includes('Mac') || p.includes('OS X')) platforms.add('Mac');
+                else if (p.includes('Linux')) platforms.add('Linux');
+                else if (p.includes('SteamVR') || p.includes('Steam VR')) platforms.add('SteamVR');
+                // Skip console and mobile platforms - not relevant for Steam library
+            });
+        });
+        return ['All', ...Array.from(platforms).sort()];
+    }, [games]);
+
     const filteredAndSortedGames = useMemo(() => {
-        // 1. Filter
+        // 1. Filter by Search
         let result = [...games];
         if (debouncedSearchQuery) {
             const query = debouncedSearchQuery.toLowerCase();
@@ -54,38 +74,74 @@ export function GameList({ games, gameCount }: GameListProps) {
             );
         }
 
-        // 2. Sort
-        const multiplier = sort.direction === 'asc' ? 1 : -1;
-
-        switch (sort.field) {
-            case 'name':
-                result.sort((a, b) => multiplier * a.name.localeCompare(b.name));
-                break;
-            case 'playtime':
-                result.sort((a, b) => multiplier * (a.playtimeMinutes - b.playtimeMinutes));
-                break;
-            case 'recent':
-                result.sort((a, b) => multiplier * ((a.playtimeRecentMinutes ?? 0) - (b.playtimeRecentMinutes ?? 0)));
-                break;
+        // 2. Filter by Platform
+        if (platformFilter !== 'All') {
+            result = result.filter(game => {
+                if (!game.platforms) return false;
+                return game.platforms.some(p => {
+                    if (platformFilter === 'Windows') return p.includes('Windows') || p.includes('PC');
+                    if (platformFilter === 'Mac') return p.includes('Mac') || p.includes('OS X');
+                    if (platformFilter === 'Linux') return p.includes('Linux');
+                    if (platformFilter === 'SteamVR') return p.includes('SteamVR') || p.includes('Steam VR');
+                    return p === platformFilter;
+                });
+            });
         }
 
+        // 3. Sort
+        const multiplier = sort.direction === 'asc' ? 1 : -1;
+
+        const sortFn = (a: SteamGame, b: SteamGame) => {
+            switch (sort.field) {
+                case 'name':
+                    return multiplier * a.name.localeCompare(b.name);
+                case 'playtime':
+                    return multiplier * (a.playtimeMinutes - b.playtimeMinutes);
+                case 'recent':
+                    return multiplier * ((a.playtimeRecentMinutes ?? 0) - (b.playtimeRecentMinutes ?? 0));
+                default:
+                    return 0;
+            }
+        };
+
+        result.sort(sortFn);
         return result;
-    }, [games, sort, debouncedSearchQuery]);
+    }, [games, sort, debouncedSearchQuery, platformFilter]);
+
+    // Grouping Logic
+    const groupedGames = useMemo(() => {
+        if (!groupByGenre) return null;
+
+        const groups: Record<string, SteamGame[]> = {};
+        const noGenreKey = 'Uncategorized';
+
+        filteredAndSortedGames.forEach(game => {
+            if (!game.genres || game.genres.length === 0) {
+                if (!groups[noGenreKey]) groups[noGenreKey] = [];
+                groups[noGenreKey].push(game);
+            } else {
+                game.genres.forEach(genre => {
+                    if (!groups[genre]) groups[genre] = [];
+                    groups[genre].push(game);
+                });
+            }
+        });
+
+        // Sort groups alphabetically
+        return Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]));
+    }, [filteredAndSortedGames, groupByGenre]);
 
     const handleSortClick = (field: SortField) => {
         setSort(prev => {
             if (prev.field === field) {
-                // Toggle direction
                 return { field, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
             }
-            // New field, default direction
             return { field, direction: field === 'name' ? 'asc' : 'desc' };
         });
     };
 
     const SortButton = ({ field, label }: { field: SortField; label: string }) => {
         const isActive = sort.field === field;
-
         return (
             <button
                 onClick={() => handleSortClick(field)}
@@ -110,22 +166,53 @@ export function GameList({ games, gameCount }: GameListProps) {
     };
 
     return (
-        <div className="space-y-4">
-            {/* Search and Sort Header */}
+        <div className="space-y-6">
+            {/* Search, Sort, and Filter Header */}
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <h2 className="text-base md:text-lg font-semibold text-primary">
-                        {debouncedSearchQuery ? filteredAndSortedGames.length : gameCount} {(debouncedSearchQuery ? filteredAndSortedGames.length : gameCount) === 1 ? 'Game' : 'Games'}
+                        {filteredAndSortedGames.length === gameCount ? (
+                            <>{gameCount} {gameCount === 1 ? 'Game' : 'Games'}</>
+                        ) : (
+                            <>
+                                {filteredAndSortedGames.length} <span className="text-tertiary font-normal">of {gameCount}</span> {gameCount === 1 ? 'Game' : 'Games'}
+                            </>
+                        )}
                         {debouncedSearchQuery && <span className="text-tertiary font-normal ml-2">matching "{debouncedSearchQuery}"</span>}
                     </h2>
 
-                    {/* Sort Options */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-secondary text-sm">Sort:</span>
-                        <div className="flex gap-2">
-                            <SortButton field="playtime" label="Playtime" />
-                            <SortButton field="name" label="Name" />
-                            <SortButton field="recent" label="Recent" />
+                    <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+                        {/* Platform Filter */}
+                        <select
+                            value={platformFilter}
+                            onChange={(e) => setPlatformFilter(e.target.value)}
+                            className="h-8 pl-3 pr-8 text-xs font-medium bg-container border border-primary rounded text-secondary hover:text-primary hover:bg-hover focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 cursor-pointer transition-colors appearance-none bg-no-repeat bg-[length:12px_12px] bg-[right_10px_center]"
+                            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")` }}
+                        >
+                            {availablePlatforms.map(p => (
+                                <option key={p} value={p}>{p === 'All' ? 'All Platforms' : p}</option>
+                            ))}
+                        </select>
+
+                        {/* Genre Group Toggle */}
+                        <button
+                            onClick={() => setGroupByGenre(!groupByGenre)}
+                            className={`h-8 px-3 text-xs font-medium rounded transition-colors border ${groupByGenre
+                                ? 'bg-primary-500 text-white border-transparent'
+                                : 'bg-container text-secondary border-primary hover:text-primary'
+                                }`}
+                        >
+                            Group by Genre
+                        </button>
+
+                        {/* Sort Options */}
+                        <div className="flex items-center gap-2">
+                            <span className="text-secondary text-sm hidden sm:inline">Sort:</span>
+                            <div className="flex gap-2">
+                                <SortButton field="playtime" label="Playtime" />
+                                <SortButton field="name" label="Name" />
+                                <SortButton field="recent" label="Recent" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,13 +247,31 @@ export function GameList({ games, gameCount }: GameListProps) {
                 </div>
             </div>
 
-            {/* Game Grid */}
+            {/* Game Grid / Grouped View */}
             {filteredAndSortedGames.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    {filteredAndSortedGames.map((game) => (
-                        <GameCard key={game.appId} game={game} />
-                    ))}
-                </div>
+                groupByGenre && groupedGames ? (
+                    <div className="space-y-8">
+                        {groupedGames.map(([genre, games]) => (
+                            <div key={genre} className="space-y-3">
+                                <h3 className="text-lg font-semibold text-primary sticky top-16 bg-background/95 backdrop-blur py-2 z-10 border-b border-primary/20">
+                                    {genre} <span className="text-tertiary text-sm font-normal">({games.length})</span>
+                                </h3>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                                    {games.map((game) => (
+                                        // Use generic key combination as games can properly appear in multiple genres
+                                        <GameCard key={`${genre}-${game.appId}`} game={game} />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                        {filteredAndSortedGames.map((game) => (
+                            <GameCard key={game.appId} game={game} />
+                        ))}
+                    </div>
+                )
             ) : (
                 <div className="text-center py-12 bg-card border border-dashed border-secondary rounded-md">
                     <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-hover flex items-center justify-center">
@@ -175,12 +280,12 @@ export function GameList({ games, gameCount }: GameListProps) {
                         </svg>
                     </div>
                     <h3 className="text-sm font-medium text-secondary">No games found</h3>
-                    <p className="text-xs text-tertiary mt-1">Try adjusting your search query</p>
+                    <p className="text-xs text-tertiary mt-1">Try adjusting your filters</p>
                     <button
-                        onClick={() => setSearchQuery('')}
+                        onClick={() => { setSearchQuery(''); setPlatformFilter('All'); }}
                         className="mt-4 text-xs font-medium text-primary-500 hover:text-primary-600 transition-colors"
                     >
-                        Clear search
+                        Clear filters
                     </button>
                 </div>
             )}
