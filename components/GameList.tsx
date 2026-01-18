@@ -26,6 +26,7 @@ interface SortState {
 export function GameList({ games, gameCount }: GameListProps) {
     const [platformFilter, setPlatformFilter] = useState<string>('All');
     const [groupByGenre, setGroupByGenre] = useState(false);
+    const [collapsedGenres, setCollapsedGenres] = useState<Set<string>>(new Set());
 
     // Restored State
     const [sort, setSort] = useState<SortState>({ field: 'playtime', direction: 'desc' });
@@ -250,20 +251,48 @@ export function GameList({ games, gameCount }: GameListProps) {
             {/* Game Grid / Grouped View */}
             {filteredAndSortedGames.length > 0 ? (
                 groupByGenre && groupedGames ? (
-                    <div className="space-y-8">
-                        {groupedGames.map(([genre, games]) => (
-                            <div key={genre} className="space-y-3">
-                                <h3 className="text-lg font-semibold text-primary sticky top-16 bg-background/95 backdrop-blur py-2 z-10 border-b border-primary/20">
-                                    {genre} <span className="text-tertiary text-sm font-normal">({games.length})</span>
-                                </h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                                    {games.map((game) => (
-                                        // Use generic key combination as games can properly appear in multiple genres
-                                        <GameCard key={`${genre}-${game.appId}`} game={game} />
-                                    ))}
+                    <div className="space-y-4">
+                        {groupedGames.map(([genre, games]) => {
+                            const isCollapsed = collapsedGenres.has(genre);
+                            return (
+                                <div key={genre} className="rounded-lg overflow-hidden bg-card border border-secondary">
+                                    <button
+                                        onClick={() => {
+                                            setCollapsedGenres(prev => {
+                                                const next = new Set(prev);
+                                                if (next.has(genre)) {
+                                                    next.delete(genre);
+                                                } else {
+                                                    next.add(genre);
+                                                }
+                                                return next;
+                                            });
+                                        }}
+                                        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-hover transition-colors bg-card"
+                                    >
+                                        <span className="flex items-center gap-3">
+                                            <svg
+                                                className={`w-4 h-4 text-tertiary transition-transform duration-200 ${isCollapsed ? '' : 'rotate-90'}`}
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            </svg>
+                                            <span className="text-base font-semibold text-primary">{genre}</span>
+                                            <span className="text-sm text-tertiary font-normal">({games.length})</span>
+                                        </span>
+                                    </button>
+                                    {!isCollapsed && (
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4 pt-2">
+                                            {games.map((game) => (
+                                                <GameCard key={`${genre}-${game.appId}`} game={game} />
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
