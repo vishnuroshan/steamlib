@@ -26,3 +26,24 @@ CREATE POLICY "Allow anon insert" ON game_metadata
 
 CREATE POLICY "Allow anon update" ON game_metadata
     FOR UPDATE USING (true);
+
+-- Create user_profiles table (Privacy friendly: Only identity, no games)
+CREATE TABLE IF NOT EXISTS user_profiles (
+    steam_id TEXT PRIMARY KEY,
+    username TEXT,
+    avatar_url TEXT,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access" ON user_profiles
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow anon insert/update" ON user_profiles
+    FOR ALL USING (true) WITH CHECK (true);
+
+-- Add missing columns to game_metadata if they don't exist
+ALTER TABLE game_metadata ADD COLUMN IF NOT EXISTS platforms JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE game_metadata ADD COLUMN IF NOT EXISTS year INT; 
+ALTER TABLE game_metadata ADD COLUMN IF NOT EXISTS external_game_source INT;

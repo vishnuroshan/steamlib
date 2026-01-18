@@ -1,8 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import type { SteamGame } from '@/lib/shared/types';
 import { formatPlaytime } from '@/lib/shared/normalizer';
 import * as Popover from '@radix-ui/react-popover';
-import { useGameMetadata } from '@/hooks/useGameMetadata';
 import { GameDetailsPopover } from './GameDetailsPopover';
 
 interface GameCardProps {
@@ -11,27 +10,9 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
     const [imgError, setImgError] = useState(false);
-    const { fetchMetadata, getMetadataForGame, loading } = useGameMetadata();
-
-    // Fetch data when popover opens
-    const onOpenChange = (open: boolean) => {
-        if (open) {
-            const metadata = getMetadataForGame(game.appId);
-            if (!metadata) {
-                fetchMetadata([game.appId]);
-            }
-        }
-    };
-
-    const gameMetadata = getMetadataForGame(game.appId);
-
-    // Mobile click handler to trigger popover logic if needed (handled by Radix Trigger mostly)
-    // We might need a controlled state if we want the card click to open it, but Radix handles the trigger button.
-    // For the whole card click on mobile, we can make the card a trigger or keep the button. 
-    // Usage of 'asChild' on the Trigger wraps our button.
 
     return (
-        <Popover.Root onOpenChange={onOpenChange}>
+        <Popover.Root>
             <div
                 className="group relative bg-card border border-primary rounded-lg overflow-hidden hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 cursor-pointer"
             >
@@ -82,7 +63,7 @@ export function GameCard({ game }: GameCardProps) {
                             <button
                                 className="p-2 rounded-full bg-black/40 text-white/70 backdrop-blur-md border border-white/10 hover:bg-primary-500 hover:text-white hover:border-primary-400 transition-all duration-300 shadow-lg outline-none focus:ring-2 focus:ring-primary-500/50"
                                 title="View Details"
-                                onClick={(e) => e.stopPropagation()} // Prevent card click
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -129,14 +110,11 @@ export function GameCard({ game }: GameCardProps) {
                     className="z-50 w-80 rounded-xl bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl p-4 animate-in fade-in zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 outline-none"
                     sideOffset={5}
                 >
-                    <GameDetailsPopover
-                        gameName={game.name}
-                        metadata={gameMetadata}
-                        loading={loading}
-                    />
+                    <GameDetailsPopover game={game} />
                     <Popover.Arrow className="fill-white/10" />
                 </Popover.Content>
             </Popover.Portal>
         </Popover.Root>
     );
 }
+

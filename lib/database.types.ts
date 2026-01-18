@@ -48,6 +48,27 @@ export interface Database {
                 }
                 Relationships: []
             }
+            user_profiles: {
+                Row: {
+                    steam_id: string
+                    username: string | null
+                    avatar_url: string | null
+                    updated_at: string | null
+                }
+                Insert: {
+                    steam_id: string
+                    username?: string | null
+                    avatar_url?: string | null
+                    updated_at?: string | null
+                }
+                Update: {
+                    steam_id?: string
+                    username?: string | null
+                    avatar_url?: string | null
+                    updated_at?: string | null
+                }
+                Relationships: []
+            }
         }
         Views: {
             [_ in never]: never

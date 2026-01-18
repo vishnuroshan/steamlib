@@ -31,6 +31,10 @@ export interface SteamGame {
     iconUrl: string | null;
     logoUrl: string | null;
     coverUrl: string | null;
+    // Rich metadata (Optional as it comes from a different source)
+    platforms?: string[];
+    genres?: string[];
+    releaseYear?: number;
 }
 
 // =============================================================================
