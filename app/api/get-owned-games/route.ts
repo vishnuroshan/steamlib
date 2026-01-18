@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { GetOwnedGamesResponse } from '@/lib/shared/types';
 import { normalizeOwnedGames, normalizeProfile, type RawOwnedGamesResponse, type RawPlayerSummary } from '@/lib/shared/normalizer';
 import { ensureGameMetadata } from '@/lib/igdb';
-import { getSupabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
     try {
@@ -54,18 +53,7 @@ export async function POST(request: Request) {
         const normalizedGames = normalizeOwnedGames(gamesData);
         const normalizedProfile = normalizeProfile(profileData.response.players[0]);
 
-        // 1. Store clean profile in DB (Privacy: ONLY public identity)
-        const supabase = getSupabase();
-        await supabase.from('user_profiles').upsert({
-            steam_id: normalizedProfile.steamId64,
-            username: normalizedProfile.personaname,
-            avatar_url: normalizedProfile.avatarFull,
-            updated_at: new Date().toISOString()
-        }).then(({ error }) => {
-            if (error) console.error('Failed to save user profile:', error);
-        });
-
-        // 2. Fetch/Cache Metadata for these games
+        // Fetch/Cache Metadata for these games
         const appIds = normalizedGames.games.map(g => g.appId);
         const metadata = await ensureGameMetadata(appIds);
         const metadataMap = new Map(metadata.map(m => [m.appid, m]));
