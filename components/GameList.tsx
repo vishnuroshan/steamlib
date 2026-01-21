@@ -48,22 +48,34 @@ export function GameList({ games, gameCount }: GameListProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // Extract unique platforms for filters (Memoized)
-    // Only show PC-relevant platforms since this is a Steam library
+    // Static list of platforms as requested
     const availablePlatforms = useMemo(() => {
-        const platforms = new Set<string>();
-        games.forEach(game => {
-            game.platforms?.forEach(p => {
-                // Only include PC/Steam-relevant platforms
-                if (p.includes('Windows') || p.includes('PC')) platforms.add('Windows');
-                else if (p.includes('Mac') || p.includes('OS X')) platforms.add('Mac');
-                else if (p.includes('Linux')) platforms.add('Linux');
-                else if (p.includes('SteamVR') || p.includes('Steam VR')) platforms.add('SteamVR');
-                // Skip console and mobile platforms - not relevant for Steam library
-            });
-        });
-        return ['All', ...Array.from(platforms).sort()];
-    }, [games]);
+        const platforms = [
+            "Android",
+            "Google Stadia",
+            "iOS",
+            "Linux",
+            "Mac",
+            "Nintendo GameCube",
+            "Nintendo Switch",
+            "Nintendo Switch 2",
+            "Oculus Rift",
+            "PC (Microsoft Windows)",
+            "PlayStation 2",
+            "PlayStation 3",
+            "PlayStation 4",
+            "PlayStation 5",
+            "PlayStation Vita",
+            "PlayStation VR",
+            "SteamVR",
+            "Wii U",
+            "Xbox",
+            "Xbox 360",
+            "Xbox One",
+            "Xbox Series X|S"
+        ];
+        return ['All', ...platforms];
+    }, []);
 
     const filteredAndSortedGames = useMemo(() => {
         // 1. Filter by Search
@@ -80,11 +92,24 @@ export function GameList({ games, gameCount }: GameListProps) {
             result = result.filter(game => {
                 if (!game.platforms) return false;
                 return game.platforms.some(p => {
-                    if (platformFilter === 'Windows') return p.includes('Windows') || p.includes('PC');
-                    if (platformFilter === 'Mac') return p.includes('Mac') || p.includes('OS X');
-                    if (platformFilter === 'Linux') return p.includes('Linux');
-                    if (platformFilter === 'SteamVR') return p.includes('SteamVR') || p.includes('Steam VR');
-                    return p === platformFilter;
+                    const pLower = p.toLowerCase();
+
+                    // Special mappings for Steam vs naming conventions
+                    if (platformFilter === 'PC (Microsoft Windows)') {
+                        return pLower.includes('windows') || pLower.includes('pc');
+                    }
+                    if (platformFilter === 'Mac') {
+                        return pLower.includes('mac') || pLower.includes('os x') || pLower.includes('osx') || pLower.includes('macos');
+                    }
+                    if (platformFilter === 'Linux') {
+                        return pLower.includes('linux');
+                    }
+                    if (platformFilter === 'SteamVR') {
+                        return pLower.includes('steamvr') || pLower.includes('steam vr');
+                    }
+
+                    // General loose matching for other platforms
+                    return pLower.includes(platformFilter.toLowerCase());
                 });
             });
         }
